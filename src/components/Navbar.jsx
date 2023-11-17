@@ -1,17 +1,35 @@
 import { HeartIcon } from "@heroicons/react/24/outline";
 
-function Navbar({ numOfResult }) {
+function Navbar({ children }) {
   return (
     <nav className="navbar">
-      <div className="nabar__logo">logo </div>
-      <input type="text" className="text-field" placeholder="search" />
-      <div className="navbar__result">Found {numOfResult} characters</div>
-      <button className="heart">
-        <HeartIcon className="icon" />
-        <span className="badge">4</span>
-      </button>
+      <Logo />
+      <Search />
+      {children}
+      <Favourites />
     </nav>
   );
 }
 
 export default Navbar;
+
+function Logo() {
+  return <div className="navbar__logo">LOGO &#128525;</div>;
+}
+
+function Search() {
+  return <input type="text" className="text-field" placeholder="search" />;
+}
+
+export function SearchResult({ numOfResult }) {
+  return <div className="navbar__result">Found {numOfResult} characters</div>;
+}
+
+function Favourites() {
+  return (
+    <button className="heart">
+      <HeartIcon className="icon" />
+      <span className="badge">4</span>
+    </button>
+  );
+}
