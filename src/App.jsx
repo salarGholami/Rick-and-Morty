@@ -9,10 +9,23 @@ function App() {
   const [characters, setCharacters] = useState([]);
 
   useEffect(() => {
-    fetch("https://rickandmortyapi.com/api/character")
-      .then((res) => res.json())
-      .then((data) => setCharacters(data.results.slice(0, 3)));
+    async function fetchData() {
+      const res = await fetch("https://rickandmortyapi.com/api/character");
+      const data = await res.json();
+      setCharacters(data.results.slice(0, 5));
+    }
+    fetchData();
   }, []);
+
+  // useEffect(() => {
+  //   fetch("https://rickandmortyapi.com/api/character")
+  //     .then((res) => res.json())
+  //     .then((data) => setCharacters(data.results.slice(0, 3)));
+  // }, []);
+
+  // then catch => async await . ???
+  // async function test(){}
+  // async ()=>{}
 
   return (
     <div className="App">
