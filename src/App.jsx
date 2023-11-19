@@ -2,7 +2,7 @@ import "./App.css";
 import { allCharacters } from "../data/data";
 import CharacterDetail from "./components/CharacterDetail";
 import CharacterList from "./components/CharacterList";
-import Navbar, { SearchResult } from "./components/Navbar";
+import Navbar, { Search, SearchResult } from "./components/Navbar";
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
@@ -10,49 +10,32 @@ import axios from "axios";
 function App() {
   const [characters, setCharacters] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     async function fetchData() {
       try {
         setIsLoading(true);
-        const {data} = await axios.get(
-          "https://rickandmortyapi.com/api/character"
+        const { data } = await axios.get(
+          `https://rickandmortyapi.com/api/character/?name=${query}`
         );
-        // const data = await res.json();
-        setCharacters(data.results.slice(0, 5));
-        setIsLoading(false);
+        setCharacters(data.results.slice(0, 4));
       } catch (err) {
-        console.log(err.response.data.error);
+        setCharacters([]);
         toast.error(err.response.data.error);
       } finally {
         setIsLoading(false);
       }
     }
+    
     fetchData();
-  }, []);
-
-  // useEffect(() => {
-  //   setIsLoading(true);
-  //   axios
-  //     .get("https://rickandmortyapi.com/api/character")
-  //     .then(({ data }) => {
-  //       setCharacters(data.results.slice(0, 3));
-  //       // setIsLoading(false);
-  //     })
-  //     .catch((err) => {
-  //       toast.error(err.response.data.error);
-  //     })
-  //     .finally(() => setIsLoading(false));
-  // }, []);
-
-  // then catch => async await . ???
-  // async function test(){}
-  // async ()=>{}
+  }, [query]);
 
   return (
     <div className="App">
       <Toaster />
       <Navbar>
+        <Search query={query} setQuery={setQuery} />
         <SearchResult numOfResult={characters.length} />
       </Navbar>
       <Main>
