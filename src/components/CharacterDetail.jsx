@@ -1,7 +1,8 @@
+import { useEffect } from "react";
 import { character, episodes } from "../../data/data";
 import { ArrowUpCircleIcon } from "@heroicons/react/24/outline";
 
-function CharacterDetail() {
+function CharacterDetail({ selectId }) {
   return (
     <div style={{ flex: 1 }}>
       <div className="character-detail">
@@ -45,7 +46,7 @@ function CharacterDetail() {
                 {String(index + 1).padStart(2, "0")}. {item.episode} :{" "}
                 <strong>{item.name}</strong>
               </div>
-              <div className="badge badge--secondary">{ item.air_date}</div>
+              <div className="badge badge--secondary">{item.air_date}</div>
             </li>
           ))}
         </ul>

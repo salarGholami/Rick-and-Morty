@@ -1,5 +1,4 @@
 import "./App.css";
-import { allCharacters } from "../data/data";
 import CharacterDetail from "./components/CharacterDetail";
 import CharacterList from "./components/CharacterList";
 import Navbar, { Search, SearchResult } from "./components/Navbar";
@@ -11,6 +10,7 @@ function App() {
   const [characters, setCharacters] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [query, setQuery] = useState("");
+  const [selectId, setSelectId] = useState(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -27,10 +27,16 @@ function App() {
         setIsLoading(false);
       }
     }
-    
+
     fetchData();
   }, [query]);
 
+  const onSelectCharacter = (id) => {
+    setSelectId(id);
+  };
+
+  console.log(selectId);
+  
   return (
     <div className="App">
       <Toaster />
@@ -39,8 +45,12 @@ function App() {
         <SearchResult numOfResult={characters.length} />
       </Navbar>
       <Main>
-        <CharacterList characters={characters} isLoading={isLoading} />
-        <CharacterDetail />
+        <CharacterList
+          onSelectCharacter={onSelectCharacter}
+          characters={characters}
+          isLoading={isLoading}
+        />
+        <CharacterDetail selectId={selectId}/>
       </Main>
     </div>
   );
