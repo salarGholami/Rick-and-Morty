@@ -5,46 +5,45 @@ import CharacterList from "./components/CharacterList";
 import Navbar, { SearchResult } from "./components/Navbar";
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import axios from "axios";
 
 function App() {
   const [characters, setCharacters] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     try {
-  //       setIsLoading(true);
-  //       const res = await fetch("https://rickandmortyapi.com/api/character");
-  //      if(!res.ok) throw new Error("something is wrong")
-  //       const data = await res.json();
-  //       setCharacters(data.results.slice(0, 5));
-  //       setIsLoading(false);
-  //     } catch (err) {
-  //       console.log(err.message);
-  //       toast.error(err.message);
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   }
-  //   fetchData();
-  // }, []);
-
   useEffect(() => {
-    setIsLoading(true);
-    fetch("https://rickandmortyapi.com/api/character")
-      .then((res) => {
-        if (!res.ok) throw new Error("something is wrong");
-        return res.json();
-      })
-      .then((data) => {
-        setCharacters(data.results.slice(0, 3));
-        // setIsLoading(false);
-      })
-      .catch((err) => {
-        toast.error(err.message);
-      })
-      .finally(() => setIsLoading(false));
+    async function fetchData() {
+      try {
+        setIsLoading(true);
+        const {data} = await axios.get(
+          "https://rickandmortyapi.com/api/character"
+        );
+        // const data = await res.json();
+        setCharacters(data.results.slice(0, 5));
+        setIsLoading(false);
+      } catch (err) {
+        console.log(err.response.data.error);
+        toast.error(err.response.data.error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchData();
   }, []);
+
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   axios
+  //     .get("https://rickandmortyapi.com/api/character")
+  //     .then(({ data }) => {
+  //       setCharacters(data.results.slice(0, 3));
+  //       // setIsLoading(false);
+  //     })
+  //     .catch((err) => {
+  //       toast.error(err.response.data.error);
+  //     })
+  //     .finally(() => setIsLoading(false));
+  // }, []);
 
   // then catch => async await . ???
   // async function test(){}
