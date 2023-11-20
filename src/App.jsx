@@ -28,15 +28,18 @@ function App() {
       }
     }
 
+    if (query.length < 3) {
+      setCharacters([]);
+      return;
+    }
+
     fetchData();
   }, [query]);
 
   const onSelectCharacter = (id) => {
-    setSelectId(id);
+    setSelectId((prevId) => (prevId === id ? null : id));
   };
 
-  console.log(selectId);
-  
   return (
     <div className="App">
       <Toaster />
@@ -46,11 +49,12 @@ function App() {
       </Navbar>
       <Main>
         <CharacterList
+          selectId={selectId}
           onSelectCharacter={onSelectCharacter}
           characters={characters}
           isLoading={isLoading}
         />
-        <CharacterDetail selectId={selectId}/>
+        <CharacterDetail selectId={selectId} />
       </Main>
     </div>
   );
