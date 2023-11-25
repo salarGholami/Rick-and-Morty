@@ -62,7 +62,7 @@ function CharacterDetail({ selectId, onAddFavourite, isAddToFavourite }) {
         />
         <div className="character-detail__info">
           <h3 className="name">
-            <span>{character.gender === "Male" ? "male" : " woman"}</span>
+            <span>{character.gender === "Male" ? "👨🏽" : " 👩🏽"}</span>
             <span>&nbsp;{character.name}</span>
           </h3>
           <div className="info">

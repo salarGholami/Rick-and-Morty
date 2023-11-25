@@ -41,11 +41,12 @@ function Character({ item, onSelectCharacter, selectId }) {
 function CharacterName({ item }) {
   return (
     <h3 className="name">
-      <span>{item.gender === "Male" ? "man" : "woman"}</span>
+      <span>{item.gender === "Male" ? "👨🏽" : "👩🏽"}</span>
       <span>{item.name}</span>
     </h3>
   );
 }
+
 function CharacterInfo({ item }) {
   return (
     <div className="list-item__info info">
