@@ -5,6 +5,7 @@ import Navbar, { Favourites, Search, SearchResult } from "./components/Navbar";
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
+import Modal from "./components/Modal";
 
 function App() {
   const [characters, setCharacters] = useState([]);
@@ -71,8 +72,11 @@ function App() {
 
   return (
     <div className="App">
-      <div style={{ color: "#fff" }}>{count}</div>
+      {/* <div style={{ color: "#fff" }}>{count}</div> */}
       <Toaster />
+      <Modal title="main title" open={true} onOpen={() => {}}>
+        this is hits
+      </Modal>
       <Navbar>
         <Search query={query} setQuery={setQuery} />
         <SearchResult numOfResult={characters.length} />
