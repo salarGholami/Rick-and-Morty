@@ -31,10 +31,10 @@ function App() {
       }
     }
 
-    if (query.length < 3) {
-      setCharacters([]);
-      return;
-    }
+    // if (query.length < 3) {
+    //   setCharacters([]);
+    //   return;
+    // }
 
     fetchData();
   }, [query]);
@@ -68,19 +68,26 @@ function App() {
     setFavourites((prevId) => [...prevId, char]); // second way and best way
   };
 
+  const HandleDeleteFavourite = (id) => {
+    setFavourites((prevFav) => prevFav.filter((fav) => fav.id !== id));
+  };
+
   const isAddToFavourite = favourites.map((fav) => fav.id).includes(selectId);
 
   return (
     <div className="App">
       {/* <div style={{ color: "#fff" }}>{count}</div> */}
       <Toaster />
-      <Modal title="main title" open={true} onOpen={() => {}}>
+      {/* <Modal title="main title" open={true} onOpen={() => {}}>
         this is hits
-      </Modal>
+      </Modal> */}
       <Navbar>
         <Search query={query} setQuery={setQuery} />
         <SearchResult numOfResult={characters.length} />
-        <Favourites numOfFavourites={favourites.length} />
+        <Favourites
+          favourites={favourites}
+          onDeleteFavourite={HandleDeleteFavourite}
+        />
       </Navbar>
       <Main>
         <CharacterList
