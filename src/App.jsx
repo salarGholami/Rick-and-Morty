@@ -12,7 +12,9 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [query, setQuery] = useState("");
   const [selectId, setSelectId] = useState(null);
-  const [favourites, setFavourites] = useState([]);
+  const [favourites, setFavourites] = useState(
+    () => JSON.parse(localStorage.getItem("FAVOURITES")) || []
+  );
   const [count, setCount] = useState(0);
 
   useEffect(() => {
@@ -47,16 +49,10 @@ function App() {
     };
   }, [count]);
 
-  // clean up function
-  // whatt?
-  // why to use ?
-  // when run ?
-  // 1.unMount component
-  // 2.before the next re-render ( between re-render )
-  // where to use ?
-  // effect => after unMount or while re-rendering
-  // Example :
-  //  fetch API , timer , eventListener , ...
+  useEffect(() => {
+    localStorage.setItem("FAVOURITES", JSON.stringify(favourites));
+  }, [favourites]);
+  // console.log(JSON.parse(localStorage.getItem("FAVOURITES")));
 
   const onSelectCharacter = (id) => {
     setSelectId((prevId) => (prevId === id ? null : id));
@@ -76,11 +72,7 @@ function App() {
 
   return (
     <div className="App">
-      {/* <div style={{ color: "#fff" }}>{count}</div> */}
       <Toaster />
-      {/* <Modal title="main title" open={true} onOpen={() => {}}>
-        this is hits
-      </Modal> */}
       <Navbar>
         <Search query={query} setQuery={setQuery} />
         <SearchResult numOfResult={characters.length} />
