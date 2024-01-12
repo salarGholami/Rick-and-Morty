@@ -3,7 +3,7 @@ import { useState } from "react";
 import Modal from "./Modal";
 import { Character } from "./CharacterList";
 
-function Navbar({ children }) {
+export default function Navbar({ children }) {
   return (
     <nav className="navbar">
       <Logo />
@@ -12,10 +12,8 @@ function Navbar({ children }) {
   );
 }
 
-export default Navbar;
-
 function Logo() {
-  return <div className="navbar__logo">LOGO &#128525;</div>;
+  return <div className="navbar__logo">LOGO 😍</div>;
 }
 
 export function Search({ query, setQuery }) {
@@ -25,7 +23,7 @@ export function Search({ query, setQuery }) {
       onChange={(e) => setQuery(e.target.value)}
       type="text"
       className="text-field"
-      placeholder="search"
+      placeholder="search..."
     />
   );
 }
@@ -36,16 +34,12 @@ export function SearchResult({ numOfResult }) {
 
 export function Favourites({ favourites, onDeleteFavourite }) {
   const [isOpen, setIsOpen] = useState(false);
+
   return (
     <>
-      <Modal open={isOpen} onOpen={setIsOpen} title="List Of Favourites">
+      <Modal onOpen={setIsOpen} open={isOpen} title="List of Favourites">
         {favourites.map((item) => (
-          <Character
-            key={item.id}
-            item={item}
-            selectId="1"
-            onSelectCharacter={() => {}}
-          >
+          <Character key={item.id} item={item}>
             <button
               className="icon red"
               onClick={() => onDeleteFavourite(item.id)}
@@ -62,3 +56,5 @@ export function Favourites({ favourites, onDeleteFavourite }) {
     </>
   );
 }
+
+// App => Navbar => SearchResult

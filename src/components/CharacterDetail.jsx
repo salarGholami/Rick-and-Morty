@@ -1,33 +1,28 @@
+import { ArrowUpCircleIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
-import { character } from "../../data/data";
-import { ArrowUpCircleIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
 import Loader from "./Loader";
-import toast from "react-hot-toast";
+import { toast } from "react-hot-toast";
 
-function CharacterDetail({ selectId, onAddFavourite, isAddToFavourite }) {
+function CharacterDetail({ selectedId, onAddFavourite, isAddToFavourite }) {
   const [character, setCharacter] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [episodes, setEpisodes] = useState();
+  const [episodes, setEpisodes] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
       try {
         setIsLoading(true);
-        setCharacter(null);
         const { data } = await axios.get(
-          `https://rickandmortyapi.com/api/character/${selectId}`
+          `https://rickandmortyapi.com/api/character/${selectedId}`
         );
-
         setCharacter(data);
 
-        const episodeId = data.episode.map((e) => e.split("/").at(-1));
-
+        const episodesId = data.episode.map((e) => e.split("/").at(-1)); // [1, 2, 3]
         const { data: episodeData } = await axios.get(
-          `https://rickandmortyapi.com/api/episode/${episodeId}`
+          `https://rickandmortyapi.com/api/episode/${episodesId}`
         );
-
-        setEpisodes([episodeData].flat().slice(0, 4));
+        setEpisodes([episodeData].flat().slice(0, 6));
       } catch (error) {
         toast.error(error.response.data.error);
       } finally {
@@ -35,20 +30,20 @@ function CharacterDetail({ selectId, onAddFavourite, isAddToFavourite }) {
       }
     }
 
-    if (selectId) fetchData();
-  }, [selectId]);
+    if (selectedId) fetchData();
+  }, [selectedId]);
 
   if (isLoading)
     return (
-      <div style={{ flex: 1, color: "var(--slate-300)" }}>
+      <div style={{ flex: 1 }}>
         <Loader />
       </div>
     );
 
-  if (!character || !selectId)
+  if (!character || !selectedId)
     return (
       <div style={{ flex: 1, color: "var(--slate-300)" }}>
-        please select the character
+        Please select a character.
       </div>
     );
 
@@ -76,23 +71,23 @@ function CharacterSubInfo({ character, isAddToFavourite, onAddFavourite }) {
       />
       <div className="character-detail__info">
         <h3 className="name">
-          <span>{character.gender === "Male" ? "👨🏽" : " 👩🏽"}</span>
+          <span>{character.gender === "Male" ? "👱🏻‍♂️" : "👩🏻‍🦳"}</span>
           <span>&nbsp;{character.name}</span>
         </h3>
         <div className="info">
           <span
             className={`status ${character.status === "Dead" ? "red" : ""}`}
           ></span>
-          <span>&nbsp;{character.status} </span>
-          <span>-&nbsp;{character.species}</span>
+          <span>&nbsp;{character.status}</span>
+          <span> - &nbsp;{character.species}</span>
         </div>
         <div className="location">
-          <p>Last know location</p>
+          <p>Last known location:</p>
           <p>{character.location.name}</p>
         </div>
         <div className="actions">
           {isAddToFavourite ? (
-            <p>Already Added To Favourite✅</p>
+            <p>Already Added To Favourites ✅</p>
           ) : (
             <button
               onClick={() => onAddFavourite(character)}
@@ -108,7 +103,8 @@ function CharacterSubInfo({ character, isAddToFavourite, onAddFavourite }) {
 }
 
 function EpisodeList({ episodes }) {
-  const [sortBy, setSortBy] = useState(true);
+  // true => earliest => asc
+  const [sortBy, setSortby] = useState(true);
 
   let sortedEpisodes;
 
@@ -125,8 +121,8 @@ function EpisodeList({ episodes }) {
   return (
     <div className="character-episodes">
       <div className="title">
-        <h2>List of Episodes</h2>
-        <button onClick={() => setSortBy((is) => !is)}>
+        <h2>List of Episodes:</h2>
+        <button onClick={() => setSortby((is) => !is)}>
           <ArrowUpCircleIcon
             className="icon"
             style={{ rotate: sortBy ? "0deg" : "180deg" }}
@@ -137,7 +133,7 @@ function EpisodeList({ episodes }) {
         {sortedEpisodes.map((item, index) => (
           <li key={item.id}>
             <div>
-              {String(index + 1).padStart(2, "0")}. {item.episode} :{" "}
+              {String(index + 1).padStart(2, "0")} - {item.episode} :{" "}
               <strong>{item.name}</strong>
             </div>
             <div className="badge badge--secondary">{item.air_date}</div>
